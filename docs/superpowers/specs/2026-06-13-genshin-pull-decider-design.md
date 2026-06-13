@@ -20,6 +20,19 @@
 ### 缺口（差异点）
 现有英文工具（paimon.moe 等）都在算「怎么算概率」，几乎没人做「**给结论 + 可分享结果卡**」。Reddit 又特别爱转结果卡片图——这是传播入口。
 
+### 差异化楔子（产品核心赌注）⭐
+这是本项目唯一能赢老工具的地方，**资源向这里倾斜**：
+
+- **认清现实**：「计算器+结论」本身没护城河、好抄；老工具 SEO 已扎根，硬拼算法/排名赢不了。
+- **唯一胜负手 = 社交传播**：把宝押在「**一张 Reddit 玩家愿意截图斗图的结果卡 + 一句扎心/好笑的结论**」。老计算器恰恰没有这个。
+- **结论文案要有「梗」**，用 gacha 圈黑话，能引发共鸣/转发，而不是干巴巴报数字。例：
+  - 🔴 `"SKIP — you're 140 wishes short. Pure copium."`
+  - 🟡 `"WAIT — 52%. That's a coinflip, anon. Save a bit more."`
+  - 🟢 `"PULL — 91%. The gacha gods smile upon you."`
+  - （F2P / whale / copium / hopium / anon / pity 这些黑话是 Reddit 通行语，用对了就对味）
+- **结果卡设计目标**：竖版、好看、自带 ShouldIPull 水印+网址，让「截图发帖」本身成为获客渠道。卡片质量 = 传播率 = 项目生死。
+- **衡量楔子成不成**：分享图被生成/转发的比例，比单纯访问量更能说明「这东西有没有戳中人」。
+
 ### 约束：避开商标
 "Genshin"/"HoYoverse" 是米哈游商标，**不进产品名和域名**。招牌用功能词（ShouldIPull），页面内文案写 "Genshin Impact banner" 描述用途没问题。
 
@@ -94,17 +107,24 @@ UI 文案全英文（下表「界面文案」列为实际显示文字）。
 - **决策灯**：🟢 Pull / 🟡 Wait / 🔴 Skip
   - 阈值（v1 简单规则，可调）：到手概率 ≥ 70% → 🟢；40%~70% → 🟡；< 40% → 🔴
 - **到手概率**："87% chance to get them" + 进度条
-- **2~3 条人话理由**（英文，按输入动态生成），例如：
+- **一句「梗」结论**（核心，见差异化楔子）：按概率档位 + 输入，从文案库挑一句有梗、对味的话。例：
+  - 🔴 "SKIP — you're 140 wishes short. Pure copium."
+  - 🟡 "WAIT — 52%. That's a coinflip, anon."
+  - 🟢 "PULL — 91%. The gacha gods smile upon you."
+- **2~3 条事实理由**（英文，动态生成，给信服力）：
   - "80 wishes + 20 pity + guaranteed → almost certain"
   - "You'll likely have ~10 wishes left"
   - "Not enough for the weapon — short by ~40 wishes"
 - **算法依据小字**："Based on official rates + pity system · 10,000 Monte Carlo simulations"
 
-### 2.4 分享功能
-- 出结果后显示 **"Share result" / [Save image]** 按钮。
-- 点击把「决策灯 + 到手概率 + 关键输入」渲染成一张**竖版图片**（适合 Reddit/Discord 发帖、手机截图）。
-- 图片底部带 **ShouldIPull + 网址**，作为自然传播入口（Reddit 爱转结果卡）。
-- 实现：用 `html2canvas`（CDN 引入）把结果卡片 DOM 转成图片下载，无需后端。
+### 2.4 分享功能（项目核心，非附属）
+这是差异化楔子的落地，质量决定项目生死，**投入最多打磨**。
+- 出结果后显著位置放 **"Share result" / [Save image]** 按钮。
+- 渲染一张**竖版结果卡**：🟢🟡🔴 决策灯 + 大号梗结论 + 到手概率进度条 + 关键输入摘要。
+- 设计要求：好看、对味、移动端清晰；底部 **ShouldIPull 水印 + shouldipull.com**，让截图发帖=获客。
+- 文案库按档位分组（SKIP/WAIT/PULL 各备多条梗文案，随机或按输入选），避免千篇一律。
+- 实现：用 `html2canvas`（CDN 引入）把结果卡 DOM 转成图片下载，无需后端。
+- （可选增强，时间够再做）"Copy link" 带参数 URL，让别人点开直接看到同样的结果。
 
 ## 3. 技术方案
 
