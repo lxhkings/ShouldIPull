@@ -29,3 +29,34 @@ export function exactProbabilitySingle(wishes, pity, guaranteed) {
   for (const mass of dp.values()) remaining += mass;
   return 1 - remaining;
 }
+
+// 追加到 src/gacha.js
+function simulateOnce(wishes, pity, guaranteed, target) {
+  let curPity = pity, curGuar = guaranteed, limited = 0;
+  for (let i = 1; i <= wishes; i++) {
+    curPity += 1;
+    if (Math.random() < pull5StarRate(curPity)) {
+      let isLimited;
+      if (curGuar) isLimited = true;
+      else if (Math.random() < 0.5) isLimited = true;
+      else isLimited = false;
+      if (isLimited) { limited += 1; curGuar = false; }
+      else curGuar = true;
+      curPity = 0;
+      if (limited >= target) return { gotTarget: true, wishesUsedToReachTarget: i };
+    }
+  }
+  return { gotTarget: false, wishesUsedToReachTarget: null };
+}
+
+export function simulate({ wishes, pity, guaranteed, target, sims = 10000 }) {
+  let success = 0, usedSum = 0;
+  for (let s = 0; s < sims; s++) {
+    const r = simulateOnce(wishes, pity, guaranteed, target);
+    if (r.gotTarget) { success += 1; usedSum += r.wishesUsedToReachTarget; }
+  }
+  return {
+    probability: success / sims,
+    avgWishesUsedOnSuccess: success > 0 ? usedSum / success : null,
+  };
+}

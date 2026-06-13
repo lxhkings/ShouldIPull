@@ -28,3 +28,26 @@ test("exact: hard pity + guaranteed -> 1", () => {
 test("exact: hard pity + 50/50 -> 0.5", () => {
   assert.ok(Math.abs(exactProbabilitySingle(1, 89, false) - 0.5) < 1e-9);
 });
+
+// 追加到 test/gacha.test.js
+import { simulate } from "../src/gacha.js";
+
+test("simulate: zero wishes -> 0%", () => {
+  assert.equal(simulate({ wishes: 0, pity: 0, guaranteed: false, target: 1 }).probability, 0);
+});
+test("simulate: hard pity + guaranteed -> ~100%", () => {
+  assert.ok(simulate({ wishes: 1, pity: 89, guaranteed: true, target: 1 }).probability > 0.99);
+});
+test("simulate matches exact within 2%", () => {
+  const scenarios = [
+    { wishes: 90, pity: 0, guaranteed: false },
+    { wishes: 50, pity: 20, guaranteed: false },
+    { wishes: 180, pity: 0, guaranteed: false },
+    { wishes: 30, pity: 70, guaranteed: true },
+  ];
+  for (const s of scenarios) {
+    const sim = simulate({ ...s, target: 1, sims: 50000 }).probability;
+    const exact = exactProbabilitySingle(s.wishes, s.pity, s.guaranteed);
+    assert.ok(Math.abs(sim - exact) < 0.02, `sim ${sim} vs exact ${exact} for ${JSON.stringify(s)}`);
+  }
+});
