@@ -51,3 +51,14 @@ test("simulate matches exact within 2%", () => {
     assert.ok(Math.abs(sim - exact) < 0.02, `sim ${sim} vs exact ${exact} for ${JSON.stringify(s)}`);
   }
 });
+
+// 追加到 test/gacha.test.js
+import { verdict } from "../src/gacha.js";
+test("verdict thresholds", () => {
+  assert.equal(verdict(0.91), "pull");
+  assert.equal(verdict(0.70), "pull");
+  assert.equal(verdict(0.69), "wait");
+  assert.equal(verdict(0.40), "wait");
+  assert.equal(verdict(0.39), "skip");
+  assert.equal(verdict(0), "skip");
+});

@@ -60,3 +60,10 @@ export function simulate({ wishes, pity, guaranteed, target, sims = 10000 }) {
     avgWishesUsedOnSuccess: success > 0 ? usedSum / success : null,
   };
 }
+
+// 追加到 src/gacha.js
+export function verdict(probability) {
+  if (probability >= 0.70) return "pull";
+  if (probability >= 0.40) return "wait";
+  return "skip";
+}
