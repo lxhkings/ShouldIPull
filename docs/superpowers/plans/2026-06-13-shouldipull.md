@@ -1021,6 +1021,8 @@ git commit -m "feat: 结果卡一键生成分享图(html2canvas)"
 
 **Files:**
 - Modify: `index.html`（补 SEO/OG meta）
+- Create: `robots.txt`
+- Create: `sitemap.xml`
 - Create: `vercel.json`
 - Create: `README.md`
 
@@ -1032,6 +1034,27 @@ git commit -m "feat: 结果卡一键生成分享图(html2canvas)"
   <meta property="og:type" content="website" />
   <meta name="twitter:card" content="summary_large_image" />
   <link rel="canonical" href="https://shouldipull.com/" />
+```
+
+- [ ] **Step 1b: 写 robots.txt（允许收录 + 指向 sitemap）**
+
+```
+User-agent: *
+Allow: /
+Sitemap: https://shouldipull.com/sitemap.xml
+```
+
+- [ ] **Step 1c: 写 sitemap.xml**
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://shouldipull.com/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+</urlset>
 ```
 
 - [ ] **Step 2: 写 vercel.json（静态站点，无构建）**
@@ -1068,9 +1091,11 @@ Run: `python3 -m http.server 8000` 手动过一遍三档 + 分享图 + 错误校
 - [ ] **Step 5: Commit**
 
 ```bash
-git add index.html vercel.json README.md
-git commit -m "chore: SEO meta + Vercel配置 + README"
+git add index.html robots.txt sitemap.xml vercel.json README.md
+git commit -m "chore: SEO meta + robots + sitemap + Vercel配置 + README"
 ```
+
+部署后：到 Google Search Console 验证站点所有权，提交 `sitemap.xml`。
 
 - [ ] **Step 6: 部署（用户操作）**
 
