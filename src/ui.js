@@ -59,6 +59,22 @@ function init() {
     errEl.textContent = "";
     renderResult(parsed.values);
   });
+  initShare();
+}
+
+// 追加到 src/ui.js
+function initShare() {
+  const btn = document.getElementById("share");
+  if (!btn) return;
+  btn.addEventListener("click", async () => {
+    const card = document.getElementById("card");
+    if (typeof window.html2canvas !== "function") { btn.textContent = "Screenshot the card to share 📸"; return; }
+    const canvas = await window.html2canvas(card, { backgroundColor: "#1a1c30", scale: 2 });
+    const link = document.createElement("a");
+    link.download = "shouldipull.png";
+    link.href = canvas.toDataURL("image/png");
+    link.click();
+  });
 }
 
 if (typeof document !== "undefined") init();
