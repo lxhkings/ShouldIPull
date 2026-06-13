@@ -1,0 +1,9 @@
+/* style.css —— 占位, 计划 2 (Claude) 替换为打磨版 */
+body { font-family: system-ui, sans-serif; margin: 0; padding: 1rem; }
+#app { max-width: 480px; margin: 0 auto; }
+[hidden] { display: none; }
+form label { display: block; margin-bottom: 1rem; }
+input[type=number] { display: block; width: 100%; padding: .5rem; }
+.error { color: #c00; }
+#card { border: 1px solid #ccc; padding: 1rem; margin-top: 1rem; text-align: center; }
+.bar { height: 12px; background: #eee; } #bar-fill { height: 100%; background: #4a90d9; }
