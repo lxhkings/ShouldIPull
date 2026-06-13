@@ -1,9 +1,256 @@
-/* style.css —— 占位, 计划 2 (Claude) 替换为打磨版 */
-body { font-family: system-ui, sans-serif; margin: 0; padding: 1rem; }
-#app { max-width: 480px; margin: 0 auto; }
+/* style.css —— 打磨版: 暗色 / 移动端优先 / 三档配色 / 截图友好 */
+
+:root {
+  --bg: #12141f;
+  --panel: #1f2236;       /* 卡片底色, 比截图背景 #1a1c30 略亮, 能读出"卡片感" */
+  --panel-2: #262a42;     /* 输入框等次级面板 */
+  --text: #e8eaf2;
+  --muted: #9aa0bd;
+  --line: #343a5c;
+  --accent: #6c8cff;      /* 中性强调(按钮/聚焦), 三档色覆盖 */
+}
+
+* { box-sizing: border-box; }
 [hidden] { display: none; }
-form label { display: block; margin-bottom: 1rem; }
-input[type=number] { display: block; width: 100%; padding: .5rem; }
-.error { color: #c00; }
-#card { border: 1px solid #ccc; padding: 1rem; margin-top: 1rem; text-align: center; }
-.bar { height: 12px; background: #eee; } #bar-fill { height: 100%; background: #4a90d9; }
+
+body {
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  margin: 0;
+  padding: 1.25rem 1rem 2.5rem;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+#app {
+  max-width: 460px;
+  margin: 0 auto;
+}
+
+h1 {
+  margin: .25rem 0 .25rem;
+  font-size: 1.9rem;
+  letter-spacing: -.01em;
+}
+
+.sub {
+  margin: 0 0 1.5rem;
+  color: var(--muted);
+  font-size: .95rem;
+}
+.sub b { color: var(--text); }
+
+/* ---------- 表单 ---------- */
+#calc label {
+  display: block;
+  margin-bottom: 1.1rem;
+  font-weight: 600;
+  font-size: .95rem;
+}
+
+#calc label small {
+  display: block;
+  margin-top: .3rem;
+  font-weight: 400;
+  color: var(--muted);
+  font-size: .8rem;
+}
+
+input[type=number] {
+  display: block;
+  width: 100%;
+  margin-top: .4rem;
+  padding: .7rem .8rem;
+  font-size: 1rem;
+  color: var(--text);
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+input[type=number]::placeholder { color: #6b7196; }
+
+input:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+fieldset {
+  margin: 0 0 1.1rem;
+  padding: .8rem 1rem 1rem;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+}
+
+legend {
+  padding: 0 .4rem;
+  font-weight: 600;
+  font-size: .95rem;
+}
+
+fieldset label {
+  margin-bottom: .4rem;
+  font-weight: 400;
+  cursor: pointer;
+}
+fieldset label:last-child { margin-bottom: 0; }
+
+.checkbox {
+  font-weight: 400 !important;
+  cursor: pointer;
+}
+
+input[type=radio],
+input[type=checkbox] {
+  accent-color: var(--accent);
+  margin-right: .4rem;
+}
+
+#calc button[type=submit] {
+  display: block;
+  width: 100%;
+  margin-top: .5rem;
+  padding: .85rem 1rem;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #fff;
+  background: var(--accent);
+  border: 0;
+  border-radius: 12px;
+  cursor: pointer;
+}
+#calc button[type=submit]:hover { filter: brightness(1.08); }
+
+.error {
+  margin: .75rem 0 0;
+  color: #ff7a7a;
+  font-weight: 600;
+  font-size: .9rem;
+}
+
+/* ---------- 结果区 ---------- */
+#result { margin-top: 1.75rem; }
+
+/* 卡片本体: html2canvas 截的就是 #card, 必须自成完整美观竖版卡片 */
+#card {
+  position: relative;
+  padding: 2rem 1.5rem 1.75rem;
+  text-align: center;
+  background: var(--panel);
+  border-radius: 18px;
+  border-top: 6px solid var(--line);     /* 三档色覆盖此顶边 */
+  box-shadow: 0 10px 30px rgba(0, 0, 0, .35);
+  overflow: hidden;
+}
+
+/* 三档配色: 顶边 + emoji/结论/概率条 强调色 */
+#card[data-tier=pull] { border-top-color: #2ecc71; --tier: #2ecc71; }
+#card[data-tier=wait] { border-top-color: #f1c40f; --tier: #f1c40f; }
+#card[data-tier=skip] { border-top-color: #e74c3c; --tier: #e74c3c; }
+
+#verdict-emoji {
+  font-size: 3rem;
+  line-height: 1;
+  margin-bottom: .5rem;
+}
+
+#verdict-line {
+  margin: 0 auto .9rem;
+  max-width: 18ch;
+  font-size: 1.45rem;
+  font-weight: 800;
+  line-height: 1.25;
+  letter-spacing: -.01em;
+  text-wrap: balance;
+  color: var(--tier, var(--text));
+}
+
+/* 概率条: 圆角轨道 + 强调色填充, 宽度由 JS 内联设置, 此处不设宽度 */
+.bar {
+  height: 12px;
+  margin: 0 0 .55rem;
+  background: var(--panel-2);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+#bar-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: var(--tier, var(--accent));
+  transition: width .6s ease;
+}
+
+#prob-text {
+  margin: 0 0 1.1rem;
+  font-size: .95rem;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+#reasons {
+  margin: 0 0 1.25rem;
+  padding: 0;
+  list-style: none;
+  text-align: left;
+}
+
+#reasons li {
+  position: relative;
+  margin-bottom: .5rem;
+  padding-left: 1.25rem;
+  font-size: .92rem;
+  color: var(--text);
+  line-height: 1.45;
+}
+
+#reasons li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: .55em;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--tier, var(--accent));
+}
+
+#reasons li:last-child { margin-bottom: 0; }
+
+.watermark {
+  margin: 0;
+  font-size: .8rem;
+  font-weight: 600;
+  letter-spacing: .04em;
+  color: var(--muted);
+  opacity: .75;
+}
+
+/* ---------- 分享按钮 + 算法说明(卡片外) ---------- */
+#share {
+  display: block;
+  width: 100%;
+  margin-top: 1rem;
+  padding: .85rem 1rem;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #12141f;
+  background: #fff;
+  border: 0;
+  border-radius: 12px;
+  cursor: pointer;
+}
+#share:hover { filter: brightness(.94); }
+
+.algo {
+  display: block;
+  margin-top: .9rem;
+  text-align: center;
+  font-size: .78rem;
+  color: var(--muted);
+  line-height: 1.4;
+}
