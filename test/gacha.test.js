@@ -15,3 +15,16 @@ test("hard pity at 90", () => {
   assert.equal(pull5StarRate(90), 1.0);
   assert.equal(pull5StarRate(95), 1.0);
 });
+
+// 追加到 test/gacha.test.js
+import { exactProbabilitySingle } from "../src/gacha.js";
+
+test("exact: zero wishes -> 0", () => {
+  assert.equal(exactProbabilitySingle(0, 0, false), 0);
+});
+test("exact: hard pity + guaranteed -> 1", () => {
+  assert.ok(Math.abs(exactProbabilitySingle(1, 89, true) - 1) < 1e-9);
+});
+test("exact: hard pity + 50/50 -> 0.5", () => {
+  assert.ok(Math.abs(exactProbabilitySingle(1, 89, false) - 0.5) < 1e-9);
+});
