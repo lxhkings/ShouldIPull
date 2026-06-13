@@ -62,3 +62,18 @@ test("verdict thresholds", () => {
   assert.equal(verdict(0.39), "skip");
   assert.equal(verdict(0), "skip");
 });
+
+// 追加到 test/gacha.test.js
+import { buildReasons } from "../src/gacha.js";
+test("buildReasons: pull mentions leftover", () => {
+  const r = buildReasons({ wishes: 90, pity: 20, guaranteed: true, tier: "pull", probability: 0.9, avgWishesUsedOnSuccess: 75, wantWeapon: false });
+  assert.ok(r.some((x) => /left/i.test(x)));
+});
+test("buildReasons: skip mentions short by", () => {
+  const r = buildReasons({ wishes: 20, pity: 0, guaranteed: false, tier: "skip", probability: 0.1, avgWishesUsedOnSuccess: 93, wantWeapon: false });
+  assert.ok(r.some((x) => /short by/i.test(x)));
+});
+test("buildReasons: weapon note when wanted", () => {
+  const r = buildReasons({ wishes: 90, pity: 0, guaranteed: false, tier: "pull", probability: 0.8, avgWishesUsedOnSuccess: 80, wantWeapon: true });
+  assert.ok(r.some((x) => /weapon/i.test(x)));
+});

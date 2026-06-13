@@ -67,3 +67,23 @@ export function verdict(probability) {
   if (probability >= 0.40) return "wait";
   return "skip";
 }
+
+const WEAPON_AVG_COST = 80; // 专武粗估, 仅供参考
+export function buildReasons({ wishes, pity, guaranteed, tier, probability, avgWishesUsedOnSuccess, wantWeapon }) {
+  const reasons = [];
+  if (tier === "pull" && avgWishesUsedOnSuccess != null) {
+    const leftover = Math.max(0, Math.round(wishes - avgWishesUsedOnSuccess));
+    reasons.push(`You'll likely have ~${leftover} wishes left after getting them.`);
+  }
+  if (tier === "skip") {
+    const need = avgWishesUsedOnSuccess != null ? Math.round(avgWishesUsedOnSuccess) : 93;
+    reasons.push(`Short by ~${Math.max(0, need - wishes)} wishes for a comfortable shot.`);
+  }
+  if (guaranteed) reasons.push(`You're on guarantee — the next 5★ is the rate-up character.`);
+  else reasons.push(`You're on 50/50 — a 5★ might still be a standard character.`);
+  if (wantWeapon) {
+    const weaponShort = Math.max(0, WEAPON_AVG_COST + 80 - wishes);
+    reasons.push(`Want the weapon too? Roughly ~${weaponShort} more wishes needed (rough estimate).`);
+  }
+  return reasons.slice(0, 3);
+}
