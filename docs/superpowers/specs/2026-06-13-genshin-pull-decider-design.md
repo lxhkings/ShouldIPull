@@ -1,7 +1,7 @@
 # ShouldIPull — 原神卡池决策器 设计文档
 
 - 产品名：**ShouldIPull**（英文站，面向全球玩家）
-- 域名：先用 `shouldipull.vercel.app`（免费）；验证有人用后买 `shouldipull.gg` 或 `.com`
+- 域名：**已注册 `shouldipull.com`**；开发期先用免费 `shouldipull.vercel.app`，验证后把 DNS 指向 Vercel
 - 日期：2026-06-13
 - 状态：待用户确认
 - 作者：xiaohong + Claude
