@@ -475,3 +475,34 @@ input:focus-visible, button:focus-visible {
   letter-spacing: .08em;
   color: var(--muted-2);
 }
+
+/* ===================== CHARACTER PAGE ===================== */
+.banner-status {
+  margin: 0 0 1.5rem;
+  padding: .75rem .9rem;
+  background: var(--glass);
+  border: 1px solid var(--glass-line);
+  border-radius: 12px;
+  font-size: .88rem;
+  color: var(--muted);
+}
+.related { margin-top: 1.5rem; font-size: .9rem; font-weight: 600; }
+
+/* ===================== GAME INDEX: character cards ===================== */
+.char-index { display: grid; gap: .5rem; margin: 0; padding: 0; list-style: none; }
+.char-index li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: .25rem .75rem;
+  padding: .85rem 1rem;
+  background: var(--glass);
+  border: 1px solid rgba(255, 255, 255, .06);
+  border-radius: 12px;
+  transition: border-color .3s, transform .15s;
+}
+.char-index li:hover { border-color: rgba(243, 173, 82, .3); transform: translateY(-2px); }
+.char-index a { font-weight: 600; font-size: 1rem; color: var(--text); }
+.char-index a:hover { color: var(--gold); text-decoration: none; }
+.char-index span { color: var(--muted); font-size: .82rem; white-space: nowrap; }
