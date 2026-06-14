@@ -44,7 +44,7 @@ function bannerLine(char, banner) {
   return `${char.name} ${kind} in version ${banner.version}, live from ${banner.start} until ${banner.end}.`;
 }
 
-function calculatorForm() {
+export function calculatorForm() {
   return `
     <form id="calc">
       <label>Wishes / Primogems you have
@@ -54,14 +54,27 @@ function calculatorForm() {
       <label>Pity (pulls since last 5★)
         <input name="pity" type="number" min="0" max="89" inputmode="numeric" placeholder="0-89" />
       </label>
-      <fieldset>
-        <legend>Guaranteed?</legend>
-        <label><input type="radio" name="guaranteed" value="yes" /> Yes (next 5★ is guaranteed)</label>
-        <label><input type="radio" name="guaranteed" value="no" checked /> No (50/50)</label>
-      </fieldset>
-      <label>Goal (how many copies)
-        <input name="target" type="number" min="1" max="7" value="1" inputmode="numeric" />
-      </label>
+      <div class="field">
+        <span class="field-label">Guaranteed?</span>
+        <div class="seg" role="group" aria-label="Guarantee">
+          <button type="button" class="seg-btn is-active" data-guar="no">🎲 50/50</button>
+          <button type="button" class="seg-btn" data-guar="yes">✨ Guaranteed</button>
+        </div>
+        <input type="hidden" name="guaranteed" value="no" />
+      </div>
+      <div class="field">
+        <span class="field-label">Goal (copies)</span>
+        <div class="chips" role="group" aria-label="Copies desired">
+          <button type="button" class="chip is-active" data-target="1">C0</button>
+          <button type="button" class="chip" data-target="2">C1</button>
+          <button type="button" class="chip" data-target="3">C2</button>
+          <button type="button" class="chip" data-target="4">C3</button>
+          <button type="button" class="chip" data-target="5">C4</button>
+          <button type="button" class="chip" data-target="6">C5</button>
+          <button type="button" class="chip" data-target="7">C6</button>
+        </div>
+        <input type="hidden" name="target" value="1" />
+      </div>
       <label class="checkbox"><input type="checkbox" name="wantWeapon" /> Also want the signature weapon</label>
       <button type="submit">Should I pull?</button>
       <p id="error" class="error" role="alert"></p>
