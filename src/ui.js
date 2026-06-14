@@ -20,7 +20,7 @@ export function parseInputs(raw) {
 import { simulate, verdict, buildReasons } from "./gacha.js";
 import { pickVerdictLine } from "./copy.js";
 
-const EMOJI = { pull: "🟢", wait: "🟡", skip: "🔴" };
+const EMOJI = { pull: "✨", wait: "⏳", skip: "💀" };
 
 function readGameData() {
   const el = document.getElementById("game-data");
@@ -63,6 +63,23 @@ function renderResult(values) {
   reportEvent({ game: gd ? gd.game : "genshin", character: gd ? gd.character : null, tier, prob: sim.probability });
 }
 
+function initToggles() {
+  const form = document.getElementById("calc");
+  if (!form) return;
+  const wire = (selector, hiddenName, dataKey) => {
+    const hidden = form.querySelector(`input[name="${hiddenName}"]`);
+    form.querySelectorAll(selector).forEach((btn) => {
+      btn.addEventListener("click", () => {
+        form.querySelectorAll(selector).forEach((b) => b.classList.remove("is-active"));
+        btn.classList.add("is-active");
+        if (hidden) hidden.value = btn.dataset[dataKey];
+      });
+    });
+  };
+  wire(".seg-btn", "guaranteed", "guar");
+  wire(".chip", "target", "target");
+}
+
 function init() {
   const form = document.getElementById("calc");
   if (!form) return;
@@ -81,6 +98,7 @@ function init() {
     errEl.textContent = "";
     renderResult(parsed.values);
   });
+  initToggles();
   initShare();
 }
 
