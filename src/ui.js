@@ -32,9 +32,9 @@ function reportEvent(payload) {
   try {
     const body = JSON.stringify(payload);
     if (navigator.sendBeacon) {
-      navigator.sendBeacon("/api/event", new Blob([body], { type: "application/json" }));
+      navigator.sendBeacon("/api/event/", new Blob([body], { type: "application/json" }));
     } else {
-      fetch("/api/event", { method: "POST", headers: { "Content-Type": "application/json" }, body, keepalive: true }).catch(() => {});
+      fetch("/api/event/", { method: "POST", headers: { "Content-Type": "application/json" }, body, keepalive: true }).catch(() => {});
     }
   } catch { /* fire-and-forget, never block UI */ }
 }
