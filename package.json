@@ -4,6 +4,7 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "test": "node --test"
+    "test": "node --test",
+    "build": "node build.js"
   }
 }
