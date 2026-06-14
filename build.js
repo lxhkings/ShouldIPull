@@ -19,11 +19,12 @@ for (const asset of ["style.css", "robots.txt"]) {
 cpSync(new URL("./src/", import.meta.url), new URL("./dist/src/", import.meta.url), { recursive: true });
 
 const today = new Date().toISOString().slice(0, 10);
-const gameList = Object.keys(games).map((id) => ({ id, name: games[id].name }));
+const publishedIds = Object.keys(games).filter((id) => games[id].published !== false);
+const gameList = publishedIds.map((id) => ({ id, name: games[id].name }));
 const urls = ["/"];
 let activeBanners = [];
 
-for (const gameId of Object.keys(games)) {
+for (const gameId of publishedIds) {
   const game = { id: gameId, ...games[gameId] };
   const characters = read(`./data/characters/${gameId}.json`);
   const banners = read(`./data/banners/${gameId}.json`);

@@ -1,12 +1,14 @@
 {
   "genshin": {
     "name": "Genshin Impact",
+    "published": true,
     "currency": { "name": "Primogem", "perPull": 160, "wishName": "Wish" },
     "rules": { "baseRate": 0.006, "hardPity": 90, "softPityStart": 74, "softPityRamp": 0.06, "fiftyFifty": 0.5 },
     "weaponAvgCost": 80
   },
   "starrail": {
     "name": "Honkai: Star Rail",
+    "published": false,
     "currency": { "name": "Stellar Jade", "perPull": 160, "wishName": "Warp" },
     "rules": { "baseRate": 0.006, "hardPity": 90, "softPityStart": 74, "softPityRamp": 0.06, "fiftyFifty": 0.5 },
     "weaponAvgCost": 80
