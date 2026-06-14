@@ -1,5 +1,8 @@
 // src/template.js —— 纯函数: 数据 -> HTML 字符串. 无框架.
 const SITE = "https://shouldipull.com";
+const FONTS = `<link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet" />`;
 
 function esc(s) {
   return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
@@ -94,7 +97,7 @@ export function calculatorForm() {
     <section id="community-stats" hidden></section>`;
 }
 
-export function characterPage({ char, game, banner }) {
+export function characterPage({ char, game, banner, games = [] }) {
   const url = `${SITE}/${game.id}/should-i-pull/${char.id}/`;
   const desc = `Should you pull for ${char.name} (${char.rarity}★ ${char.element}, ${char.weapon})? Free pity calculator gives you Pull / Wait / Skip based on your wishes and pity.`;
   const gameData = JSON.stringify({ game: game.id, character: char.id, rules: game.rules, weaponAvgCost: game.weaponAvgCost });
@@ -111,8 +114,16 @@ export function characterPage({ char, game, banner }) {
   <meta name="twitter:card" content="summary_large_image" />
   <link rel="canonical" href="${url}" />
   <link rel="stylesheet" href="/style.css" />
+  ${FONTS}
 </head>
 <body>
+  <div class="starfield" aria-hidden="true">
+    <div class="nebula"></div>
+    <div class="stars"></div>
+    <div class="stars2"></div>
+    <div class="shoot"></div>
+    <div class="shoot2"></div>
+  </div>
   <main id="app">
     <h1>Should I Pull ${esc(char.name)}?</h1>
     <p class="sub">${esc(char.name)} — ${esc(char.rarity)}★ ${esc(char.element)}, ${esc(char.weapon)} · ${esc(char.role)}.</p>
@@ -120,6 +131,7 @@ export function characterPage({ char, game, banner }) {
     ${calculatorForm()}
     <nav class="related"><a href="/${game.id}/">← All ${esc(game.name)} characters</a></nav>
   </main>
+  ${footerNav(games)}
   <script type="application/json" id="game-data">${gameData}</script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <script type="module" src="/src/ui.js"></script>
@@ -127,7 +139,7 @@ export function characterPage({ char, game, banner }) {
 </html>`;
 }
 
-export function gameIndexPage({ game, characters }) {
+export function gameIndexPage({ game, characters, games = [] }) {
   const url = `${SITE}/${game.id}/`;
   const items = characters
     .slice()
@@ -143,8 +155,16 @@ export function gameIndexPage({ game, characters }) {
   <meta name="description" content="Per-character pull/wait/skip pity calculators for ${esc(game.name)}. Pick a character to see if you should pull." />
   <link rel="canonical" href="${url}" />
   <link rel="stylesheet" href="/style.css" />
+  ${FONTS}
 </head>
 <body>
+  <div class="starfield" aria-hidden="true">
+    <div class="nebula"></div>
+    <div class="stars"></div>
+    <div class="stars2"></div>
+    <div class="shoot"></div>
+    <div class="shoot2"></div>
+  </div>
   <main id="app">
     <h1>${esc(game.name)} — Should I Pull?</h1>
     <p class="sub">Pick a character for a pull / wait / skip verdict based on your wishes and pity.</p>
@@ -152,6 +172,7 @@ export function gameIndexPage({ game, characters }) {
       ${items}
     </ul>
   </main>
+  ${footerNav(games)}
 </body>
 </html>`;
 }
