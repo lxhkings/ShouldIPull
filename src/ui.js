@@ -22,11 +22,31 @@ import { pickVerdictLine } from "./copy.js";
 
 const EMOJI = { pull: "🟢", wait: "🟡", skip: "🔴" };
 
+function readGameData() {
+  const el = document.getElementById("game-data");
+  if (!el) return null;
+  try { return JSON.parse(el.textContent); } catch { return null; }
+}
+
+function reportEvent(payload) {
+  try {
+    const body = JSON.stringify(payload);
+    if (navigator.sendBeacon) {
+      navigator.sendBeacon("/api/event", new Blob([body], { type: "application/json" }));
+    } else {
+      fetch("/api/event", { method: "POST", headers: { "Content-Type": "application/json" }, body, keepalive: true }).catch(() => {});
+    }
+  } catch { /* fire-and-forget, never block UI */ }
+}
+
 function renderResult(values) {
-  const sim = simulate({ ...values, sims: 10000 });
+  const gd = readGameData();
+  const rules = gd ? gd.rules : { baseRate: 0.006, hardPity: 90, softPityStart: 74, softPityRamp: 0.06, fiftyFifty: 0.5 };
+  const weaponAvgCost = gd ? gd.weaponAvgCost : 80;
+  const sim = simulate({ ...values, sims: 10000, rules });
   const tier = verdict(sim.probability);
   const pct = Math.round(sim.probability * 100);
-  const reasons = buildReasons({ ...values, tier, probability: sim.probability, avgWishesUsedOnSuccess: sim.avgWishesUsedOnSuccess });
+  const reasons = buildReasons({ ...values, tier, probability: sim.probability, avgWishesUsedOnSuccess: sim.avgWishesUsedOnSuccess, weaponAvgCost });
   const shortBy = sim.avgWishesUsedOnSuccess != null ? Math.max(0, Math.round(sim.avgWishesUsedOnSuccess - values.wishes)) : 0;
   const line = pickVerdictLine(tier, { probabilityPct: pct, shortBy });
 
@@ -39,6 +59,8 @@ function renderResult(values) {
   ul.innerHTML = "";
   for (const r of reasons) { const li = document.createElement("li"); li.textContent = r; ul.appendChild(li); }
   document.getElementById("result").hidden = false;
+
+  reportEvent({ game: gd ? gd.game : "genshin", character: gd ? gd.character : null, tier, prob: sim.probability });
 }
 
 function init() {
