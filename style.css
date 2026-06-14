@@ -159,3 +159,150 @@ input:focus-visible, button:focus-visible {
   0%, 100% { transform: translateX(-100%) skewX(-20deg); }
   50%      { transform: translateX(100%) skewX(-20deg); }
 }
+
+/* ===================== CALCULATOR PANEL (glass) ===================== */
+#calc {
+  background: var(--glass);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+  border: 1px solid var(--glass-line);
+  border-radius: 18px;
+  padding: 1.25rem;
+  margin-bottom: 1.25rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, .25), inset 0 1px 0 rgba(255, 255, 255, .04);
+}
+
+#calc label {
+  display: block;
+  margin-bottom: 1.1rem;
+  font-weight: 600;
+  font-size: .9rem;
+  letter-spacing: .03em;
+  color: var(--muted);
+}
+#calc label small {
+  display: block;
+  margin-top: .3rem;
+  font-weight: 400;
+  color: var(--muted-2);
+  font-size: .8rem;
+}
+
+#calc input[type=number] {
+  display: block;
+  width: 100%;
+  margin-top: .4rem;
+  padding: .75rem .85rem;
+  font-family: "Cinzel", serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--gold);
+  background: var(--field);
+  border: 1px solid var(--field-line);
+  border-radius: 12px;
+  -webkit-appearance: none;
+  appearance: none;
+  transition: border-color .3s, box-shadow .3s;
+}
+#calc input[type=number]::placeholder { color: var(--muted-2); font-family: "Quicksand", sans-serif; font-weight: 400; }
+#calc input[type=number]:focus {
+  outline: none;
+  border-color: rgba(162, 210, 255, .3);
+  box-shadow: 0 0 0 3px rgba(162, 210, 255, .08);
+}
+
+/* field wrapper for non-input controls */
+.field { margin-bottom: 1.1rem; }
+.field-label {
+  display: block;
+  margin-bottom: .55rem;
+  font-weight: 600;
+  font-size: .8rem;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* segmented control (guaranteed) */
+.seg { display: flex; gap: .6rem; }
+.seg-btn {
+  flex: 1;
+  padding: .7rem .5rem;
+  font: inherit;
+  font-weight: 600;
+  font-size: .85rem;
+  color: var(--muted);
+  background: rgba(255, 255, 255, .02);
+  border: 1px solid rgba(255, 255, 255, .06);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all .3s;
+}
+.seg-btn:hover { border-color: rgba(255, 255, 255, .14); }
+.seg-btn.is-active {
+  color: var(--text);
+  background: rgba(255, 255, 255, .08);
+  border-color: rgba(243, 173, 82, .4);
+  box-shadow: 0 0 18px rgba(243, 173, 82, .18);
+}
+
+/* constellation chips (target) */
+.chips { display: flex; flex-wrap: wrap; gap: .4rem; }
+.chip {
+  padding: .4rem .7rem;
+  font: inherit;
+  font-weight: 600;
+  font-size: .8rem;
+  color: var(--muted);
+  background: rgba(255, 255, 255, .02);
+  border: 1px solid rgba(255, 255, 255, .06);
+  border-radius: 9px;
+  cursor: pointer;
+  transition: all .2s;
+}
+.chip:hover { border-color: rgba(255, 255, 255, .14); }
+.chip.is-active {
+  color: var(--gold);
+  background: rgba(243, 173, 82, .12);
+  border-color: rgba(243, 173, 82, .3);
+}
+
+/* weapon checkbox */
+.checkbox {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  margin-bottom: 1.1rem;
+  font-weight: 500 !important;
+  font-size: .88rem;
+  color: var(--text) !important;
+  cursor: pointer;
+}
+.checkbox input[type=checkbox] { accent-color: var(--gold); width: 1.05rem; height: 1.05rem; }
+
+/* primary submit — Intertwined Fates gradient */
+#calc button[type=submit] {
+  position: relative;
+  display: block;
+  width: 100%;
+  margin-top: .25rem;
+  padding: .9rem 1rem;
+  font-family: "Cinzel", serif;
+  font-size: .95rem;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: #0a0e1f;
+  background: linear-gradient(90deg, var(--pink), var(--purple), var(--blue));
+  border: 0;
+  border-radius: 12px;
+  cursor: pointer;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(162, 210, 255, .15);
+  transition: filter .3s, box-shadow .3s, transform .1s;
+}
+#calc button[type=submit]:hover {
+  filter: brightness(1.1);
+  box-shadow: 0 6px 32px rgba(162, 210, 255, .25), 0 0 60px rgba(255, 180, 230, .15);
+}
+#calc button[type=submit]:active { transform: scale(.98); }
