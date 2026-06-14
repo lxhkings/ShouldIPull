@@ -306,3 +306,121 @@ input:focus-visible, button:focus-visible {
   box-shadow: 0 6px 32px rgba(162, 210, 255, .25), 0 0 60px rgba(255, 180, 230, .15);
 }
 #calc button[type=submit]:active { transform: scale(.98); }
+
+/* ===================== RESULT CARD (glass, html2canvas target) ===================== */
+#result { margin-top: 1.5rem; }
+
+#card {
+  position: relative;
+  padding: 1.75rem 1.5rem;
+  text-align: center;
+  background: var(--glass);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+  border: 1px solid var(--glass-line);
+  border-radius: 18px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, .3);
+  overflow: hidden;
+  transition: border-color .5s, box-shadow .5s;
+}
+
+/* tier accent drives emoji/line/bar/border */
+#card[data-tier=pull] { --tier: var(--blue); border-color: rgba(162, 210, 255, .25); box-shadow: 0 0 40px rgba(162, 210, 255, .08), 0 8px 32px rgba(0, 0, 0, .3); }
+#card[data-tier=wait] { --tier: var(--pink); border-color: rgba(255, 180, 230, .2); }
+#card[data-tier=skip] { --tier: var(--red);  border-color: rgba(255, 107, 122, .18); }
+
+#verdict-emoji {
+  font-size: 3rem;
+  line-height: 1;
+  margin-bottom: .5rem;
+  animation: crystal-glow 3s ease-in-out infinite;
+}
+
+#verdict-line {
+  font-family: "Cinzel", serif;
+  margin: 0 auto .9rem;
+  max-width: 18ch;
+  font-size: 1.45rem;
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: .02em;
+  text-wrap: balance;
+  color: var(--tier, var(--muted));
+}
+
+.bar {
+  height: 10px;
+  margin: 0 0 .6rem;
+  background: rgba(255, 255, 255, .04);
+  border-radius: 999px;
+  overflow: hidden;
+}
+#bar-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: var(--tier, var(--blue));
+  transition: width 1s ease-out;
+}
+
+#prob-text {
+  margin: 0 0 1.1rem;
+  font-size: .9rem;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+#reasons { margin: 0 0 1.25rem; padding: 0; list-style: none; text-align: left; }
+#reasons li {
+  position: relative;
+  margin-bottom: .5rem;
+  padding-left: 1.25rem;
+  font-size: .9rem;
+  color: #b0b8d0;
+  line-height: 1.45;
+}
+#reasons li::before {
+  content: "";
+  position: absolute;
+  left: 0; top: .55em;
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--tier, var(--blue));
+}
+#reasons li:last-child { margin-bottom: 0; }
+
+.watermark {
+  margin: 0;
+  font-size: .78rem;
+  font-weight: 600;
+  letter-spacing: .08em;
+  color: var(--muted);
+  opacity: .8;
+}
+
+/* share + algo (outside the card) */
+#share {
+  display: block;
+  width: 100%;
+  margin-top: 1rem;
+  padding: .85rem 1rem;
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--text);
+  background: rgba(255, 255, 255, .05);
+  border: 1px solid var(--glass-line);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background .3s;
+}
+#share:hover { background: rgba(255, 255, 255, .1); }
+
+.algo {
+  display: block;
+  margin-top: .9rem;
+  text-align: center;
+  font-size: .76rem;
+  color: var(--muted-2);
+  line-height: 1.4;
+}
+
+.error { margin: .75rem 0 0; color: var(--red); font-weight: 600; font-size: .9rem; }
