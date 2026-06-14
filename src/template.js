@@ -176,3 +176,52 @@ export function gameIndexPage({ game, characters, games = [] }) {
 </body>
 </html>`;
 }
+
+export function homePage({ game, activeBanners, games }) {
+  const gameData = JSON.stringify({ game: game.id, character: null, rules: game.rules, weaponAvgCost: game.weaponAvgCost });
+  const browse = games
+    .map((g) => `<a class="game-link" href="/${g.id}/">${esc(g.name)}</a>`)
+    .join("\n        ");
+  return `<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>ShouldIPull — Should you pull on the new banner?</title>
+  <meta name="description" content="Tells you Pull, Wait, or Skip on the new banner based on your wishes and pity. Free, instant, no login." />
+  <meta property="og:title" content="ShouldIPull — Should you pull on the new banner?" />
+  <meta property="og:description" content="Pull, Wait, or Skip — instant verdict based on your wishes and pity." />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="canonical" href="${SITE}/" />
+  <link rel="stylesheet" href="/style.css" />
+  ${FONTS}
+</head>
+<body>
+  <div class="starfield" aria-hidden="true">
+    <div class="nebula"></div>
+    <div class="stars"></div>
+    <div class="stars2"></div>
+    <div class="shoot"></div>
+    <div class="shoot2"></div>
+  </div>
+  <main id="app">
+    <h1>Should I Pull?</h1>
+    <p class="sub">Tells you <b>Pull / Wait / Skip</b> on the new banner. No login.</p>
+    ${calculatorForm()}
+    ${currentBanners(activeBanners)}
+    <section class="browse-games">
+      <h2>Browse by game</h2>
+      <div class="game-links">
+        ${browse}
+      </div>
+    </section>
+  </main>
+  ${footerNav(games)}
+  <script type="application/json" id="game-data">${gameData}</script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script type="module" src="/src/ui.js"></script>
+  <script defer src="/_vercel/insights/script.js"></script>
+</body>
+</html>`;
+}
