@@ -109,11 +109,27 @@ function initShare() {
   btn.addEventListener("click", async () => {
     const card = document.getElementById("card");
     if (typeof window.html2canvas !== "function") { btn.textContent = "Screenshot the card to share 📸"; return; }
-    const canvas = await window.html2canvas(card, { backgroundColor: "#1a1c30", scale: 2 });
-    const link = document.createElement("a");
-    link.download = "shouldipull.png";
-    link.href = canvas.toDataURL("image/png");
-    link.click();
+    const canvas = await window.html2canvas(card, { backgroundColor: "#12141f", scale: 2 });
+    const blob = await new Promise((res) => canvas.toBlob(res, "image/png"));
+    if (!blob) { btn.textContent = "Screenshot the card to share 📸"; return; }
+
+    const file = new File([blob], "shouldipull.png", { type: "image/png" });
+    // Mobile: native share sheet (save to Photos, send to apps...)
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      try {
+        await navigator.share({ files: [file], title: "ShouldIPull", text: "Should I pull? — my verdict from ShouldIPull.com" });
+        return;
+      } catch (err) {
+        if (err && err.name === "AbortError") return; // user cancelled — don't fall back
+      }
+    }
+    // Desktop / unsupported: download the PNG
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.download = "shouldipull.png";
+    a.href = url;
+    a.click();
+    URL.revokeObjectURL(url);
   });
 }
 

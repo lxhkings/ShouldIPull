@@ -170,6 +170,10 @@ export function gameIndexPage({ game, characters, games = [] }) {
     <div class="shoot2"></div>
   </div>
   <main id="app">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="/">Home</a> <span aria-hidden="true">›</span>
+      <span aria-current="page">${esc(game.name)}</span>
+    </nav>
     <h1>${esc(game.name)} — Should I Pull?</h1>
     <p class="sub">Pick a character for a pull / wait / skip verdict based on your wishes and pity.</p>
     <ul class="char-index">
