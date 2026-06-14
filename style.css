@@ -506,3 +506,20 @@ input:focus-visible, button:focus-visible {
 .char-index a { font-weight: 600; font-size: 1rem; color: var(--text); }
 .char-index a:hover { color: var(--gold); text-decoration: none; }
 .char-index span { color: var(--muted); font-size: .82rem; white-space: nowrap; }
+
+/* ===================== ACCESSIBILITY / MOTION ===================== */
+@media (prefers-reduced-motion: reduce) {
+  .starfield .stars,
+  .starfield .stars2,
+  .starfield .shoot,
+  .starfield .shoot2,
+  #verdict-emoji,
+  #calc button[type=submit] { animation: none !important; }
+  * { transition: none !important; }
+}
+
+/* ===================== RESPONSIVE ===================== */
+@media (min-width: 520px) {
+  .banner-cards { grid-template-columns: 1fr 1fr; }
+  .game-links { grid-template-columns: 1fr 1fr; }
+}
