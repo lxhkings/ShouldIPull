@@ -254,3 +254,60 @@ input[type=checkbox] {
   color: var(--muted);
   line-height: 1.4;
 }
+
+/* ---------- 链接(SSG 页用) ---------- */
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* ---------- 角色页: 卡池状态行 + 返回导航 ---------- */
+.banner-status {
+  margin: 0 0 1.5rem;
+  padding: .7rem .9rem;
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  font-size: .9rem;
+  color: var(--muted);
+}
+
+.related {
+  margin-top: 1.5rem;
+  font-size: .9rem;
+  font-weight: 600;
+}
+
+/* ---------- 游戏索引页: 角色列表 ---------- */
+.char-index {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.char-index li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: .25rem .75rem;
+  padding: .8rem .9rem;
+  border-radius: 10px;
+  border: 1px solid transparent;
+}
+
+.char-index li:nth-child(odd) { background: var(--panel); }
+
+.char-index li:hover {
+  background: var(--panel-2);
+  border-color: var(--line);
+}
+
+.char-index a {
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.char-index span {
+  color: var(--muted);
+  font-size: .82rem;
+  white-space: nowrap;
+}
