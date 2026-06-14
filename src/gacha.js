@@ -1,11 +1,10 @@
-export function pull5StarRate(pity) {
-  if (pity >= 90) return 1.0;
-  if (pity >= 74) return 0.006 + 0.06 * (pity - 73);
-  return 0.006;
+export function pull5StarRate(pity, rules) {
+  if (pity >= rules.hardPity) return 1.0;
+  if (pity >= rules.softPityStart) return rules.baseRate + rules.softPityRamp * (pity - (rules.softPityStart - 1));
+  return rules.baseRate;
 }
 
-// W 抽内至少拿到 1 个限定的精确概率。传播 "还没拿到限定" 的概率质量, 最后 1-剩余。
-export function exactProbabilitySingle(wishes, pity, guaranteed) {
+export function exactProbabilitySingle(wishes, pity, guaranteed, rules) {
   let dp = new Map();
   dp.set(pity * 2 + (guaranteed ? 1 : 0), 1);
   for (let w = 0; w < wishes; w++) {
@@ -19,9 +18,9 @@ export function exactProbabilitySingle(wishes, pity, guaranteed) {
       const curPity = Math.floor(key / 2);
       const curGuar = (key % 2) === 1;
       const newPity = curPity + 1;
-      const r = pull5StarRate(newPity);
-      add(newPity, curGuar, mass * (1 - r)); // 没出5星, 留下
-      if (!curGuar) add(0, true, mass * r * 0.5); // 出5星但歪, 留下; 大保底/中限定则离开
+      const r = pull5StarRate(newPity, rules);
+      add(newPity, curGuar, mass * (1 - r));
+      if (!curGuar) add(0, true, mass * r * rules.fiftyFifty);
     }
     dp = next;
   }
@@ -30,15 +29,14 @@ export function exactProbabilitySingle(wishes, pity, guaranteed) {
   return 1 - remaining;
 }
 
-// 追加到 src/gacha.js
-function simulateOnce(wishes, pity, guaranteed, target) {
+function simulateOnce(wishes, pity, guaranteed, target, rules) {
   let curPity = pity, curGuar = guaranteed, limited = 0;
   for (let i = 1; i <= wishes; i++) {
     curPity += 1;
-    if (Math.random() < pull5StarRate(curPity)) {
+    if (Math.random() < pull5StarRate(curPity, rules)) {
       let isLimited;
       if (curGuar) isLimited = true;
-      else if (Math.random() < 0.5) isLimited = true;
+      else if (Math.random() < rules.fiftyFifty) isLimited = true;
       else isLimited = false;
       if (isLimited) { limited += 1; curGuar = false; }
       else curGuar = true;
@@ -49,10 +47,10 @@ function simulateOnce(wishes, pity, guaranteed, target) {
   return { gotTarget: false, wishesUsedToReachTarget: null };
 }
 
-export function simulate({ wishes, pity, guaranteed, target, sims = 10000 }) {
+export function simulate({ wishes, pity, guaranteed, target, rules, sims = 10000 }) {
   let success = 0, usedSum = 0;
   for (let s = 0; s < sims; s++) {
-    const r = simulateOnce(wishes, pity, guaranteed, target);
+    const r = simulateOnce(wishes, pity, guaranteed, target, rules);
     if (r.gotTarget) { success += 1; usedSum += r.wishesUsedToReachTarget; }
   }
   return {
@@ -61,15 +59,13 @@ export function simulate({ wishes, pity, guaranteed, target, sims = 10000 }) {
   };
 }
 
-// 追加到 src/gacha.js
 export function verdict(probability) {
   if (probability >= 0.70) return "pull";
   if (probability >= 0.40) return "wait";
   return "skip";
 }
 
-const WEAPON_AVG_COST = 80; // 专武粗估, 仅供参考
-export function buildReasons({ wishes, pity, guaranteed, tier, probability, avgWishesUsedOnSuccess, wantWeapon }) {
+export function buildReasons({ wishes, pity, guaranteed, tier, probability, avgWishesUsedOnSuccess, wantWeapon, weaponAvgCost }) {
   const reasons = [];
   if (tier === "pull" && avgWishesUsedOnSuccess != null) {
     const leftover = Math.max(0, Math.round(wishes - avgWishesUsedOnSuccess));
@@ -82,7 +78,7 @@ export function buildReasons({ wishes, pity, guaranteed, tier, probability, avgW
   if (guaranteed) reasons.push(`You're on guarantee — the next 5★ is the rate-up character.`);
   else reasons.push(`You're on 50/50 — a 5★ might still be a standard character.`);
   if (wantWeapon) {
-    const weaponShort = Math.max(0, WEAPON_AVG_COST + 80 - wishes);
+    const weaponShort = Math.max(0, weaponAvgCost + 80 - wishes);
     reasons.push(`Want the weapon too? Roughly ~${weaponShort} more wishes needed (rough estimate).`);
   }
   return reasons.slice(0, 3);
