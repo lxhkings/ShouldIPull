@@ -19,6 +19,25 @@ export function footerNav(games) {
   </footer>`;
 }
 
+export function currentBanners(items) {
+  if (!items || items.length === 0) return "";
+  const cards = items
+    .map(({ char, game, banner }) =>
+      `<a class="banner-card" href="/${game.id}/should-i-pull/${char.id}/">
+        <span class="bc-name">${esc(char.name)}</span>
+        <span class="bc-meta">${esc(char.element)} · ${esc(char.weapon)} · v${esc(banner.version)}</span>
+        <span class="bc-cta">Should I pull? →</span>
+      </a>`)
+    .join("\n      ");
+  return `
+  <section class="current-banners">
+    <h2>On the current banner</h2>
+    <div class="banner-cards">
+      ${cards}
+    </div>
+  </section>`;
+}
+
 function bannerLine(char, banner) {
   if (!banner) return `${char.name} is not on the current banner. Plan ahead for the next rerun.`;
   const kind = banner.type === "new" ? "makes their first appearance" : "is on a rerun banner";
