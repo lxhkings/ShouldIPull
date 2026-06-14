@@ -5,6 +5,20 @@ function esc(s) {
   return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 }
 
+export function footerNav(games) {
+  const links = games
+    .map((g) => `<a href="/${g.id}/">${esc(g.name)}</a>`)
+    .join("\n      ");
+  return `
+  <footer class="site-footer">
+    <nav class="footer-nav" aria-label="Site">
+      <a href="/">Home</a>
+      ${links}
+    </nav>
+    <p class="footer-mark">ShouldIPull.com</p>
+  </footer>`;
+}
+
 function bannerLine(char, banner) {
   if (!banner) return `${char.name} is not on the current banner. Plan ahead for the next rerun.`;
   const kind = banner.type === "new" ? "makes their first appearance" : "is on a rerun banner";
