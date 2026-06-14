@@ -125,11 +125,15 @@ export function characterPage({ char, game, banner, games = [] }) {
     <div class="shoot2"></div>
   </div>
   <main id="app">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="/">Home</a> <span aria-hidden="true">›</span>
+      <a href="/${game.id}/">${esc(game.name)}</a> <span aria-hidden="true">›</span>
+      <span aria-current="page">${esc(char.name)}</span>
+    </nav>
     <h1>Should I Pull ${esc(char.name)}?</h1>
     <p class="sub">${esc(char.name)} — ${esc(char.rarity)}★ ${esc(char.element)}, ${esc(char.weapon)} · ${esc(char.role)}.</p>
     <p class="banner-status">${esc(bannerLine(char, banner))}</p>
     ${calculatorForm()}
-    <nav class="related"><a href="/${game.id}/">← All ${esc(game.name)} characters</a></nav>
   </main>
   ${footerNav(games)}
   <script type="application/json" id="game-data">${gameData}</script>
