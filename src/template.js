@@ -101,6 +101,15 @@ export function characterPage({ char, game, banner, games = [] }) {
   const url = `${SITE}/${game.id}/should-i-pull/${char.id}/`;
   const desc = `Should you pull for ${char.name} (${char.rarity}★ ${char.element}, ${char.weapon})? Free pity calculator gives you Pull / Wait / Skip based on your wishes and pity.`;
   const gameData = JSON.stringify({ game: game.id, character: char.id, rules: game.rules, weaponAvgCost: game.weaponAvgCost });
+  const jsonLd = JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    name: `Should I Pull ${char.name}? — ShouldIPull`,
+    description: desc,
+    url,
+    applicationCategory: "UtilitiesApplication",
+    operatingSystem: "Web",
+  });
   return `<!doctype html>
 <html lang="en">
 <head>
@@ -111,10 +120,15 @@ export function characterPage({ char, game, banner, games = [] }) {
   <meta property="og:title" content="Should I Pull ${esc(char.name)}? — ShouldIPull" />
   <meta property="og:description" content="${esc(desc)}" />
   <meta property="og:type" content="website" />
+  <meta property="og:url" content="${url}" />
+  <meta property="og:image" content="https://shouldipull.com/og-image.png" />
   <meta name="twitter:card" content="summary_large_image" />
   <link rel="canonical" href="${url}" />
+  <link rel="icon" href="/favicon.ico" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
   <link rel="stylesheet" href="/style.css" />
   ${FONTS}
+  <script type="application/ld+json">${jsonLd}</script>
 </head>
 <body>
   <div class="starfield" aria-hidden="true">
@@ -145,6 +159,15 @@ export function characterPage({ char, game, banner, games = [] }) {
 
 export function gameIndexPage({ game, characters, games = [] }) {
   const url = `${SITE}/${game.id}/`;
+  const jsonLdIdx = JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    name: `${game.name} — Should I Pull? | ShouldIPull`,
+    description: `Per-character pull/wait/skip pity calculators for ${game.name}. Pick a character to see if you should pull.`,
+    url,
+    applicationCategory: "UtilitiesApplication",
+    operatingSystem: "Web",
+  });
   const items = characters
     .slice()
     .sort((a, b) => a.name.localeCompare(b.name))
@@ -157,9 +180,18 @@ export function gameIndexPage({ game, characters, games = [] }) {
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>${esc(game.name)} — Should I Pull? Character Pity Calculators | ShouldIPull</title>
   <meta name="description" content="Per-character pull/wait/skip pity calculators for ${esc(game.name)}. Pick a character to see if you should pull." />
+  <meta property="og:title" content="${esc(game.name)} — Should I Pull? | ShouldIPull" />
+  <meta property="og:description" content="Per-character pull/wait/skip pity calculators for ${esc(game.name)}. Pick a character to see if you should pull." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="${url}" />
+  <meta property="og:image" content="https://shouldipull.com/og-image.png" />
+  <meta name="twitter:card" content="summary_large_image" />
   <link rel="canonical" href="${url}" />
+  <link rel="icon" href="/favicon.ico" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
   <link rel="stylesheet" href="/style.css" />
   ${FONTS}
+  <script type="application/ld+json">${jsonLdIdx}</script>
 </head>
 <body>
   <div class="starfield" aria-hidden="true">
@@ -187,6 +219,15 @@ export function gameIndexPage({ game, characters, games = [] }) {
 
 export function homePage({ game, activeBanners, games }) {
   const gameData = JSON.stringify({ game: game.id, character: null, rules: game.rules, weaponAvgCost: game.weaponAvgCost });
+  const jsonLdHome = JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    name: "ShouldIPull — Should you pull on the new banner?",
+    description: "Tells you Pull, Wait, or Skip on the new banner based on your wishes and pity. Free, instant, no login.",
+    url: `${SITE}/`,
+    applicationCategory: "UtilitiesApplication",
+    operatingSystem: "Web",
+  });
   const browse = games
     .map((g) => `<a class="game-link" href="/${g.id}/">${esc(g.name)}</a>`)
     .join("\n        ");
@@ -200,10 +241,15 @@ export function homePage({ game, activeBanners, games }) {
   <meta property="og:title" content="ShouldIPull — Should you pull on the new banner?" />
   <meta property="og:description" content="Pull, Wait, or Skip — instant verdict based on your wishes and pity." />
   <meta property="og:type" content="website" />
+  <meta property="og:url" content="${SITE}/" />
+  <meta property="og:image" content="https://shouldipull.com/og-image.png" />
   <meta name="twitter:card" content="summary_large_image" />
   <link rel="canonical" href="${SITE}/" />
+  <link rel="icon" href="/favicon.ico" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
   <link rel="stylesheet" href="/style.css" />
   ${FONTS}
+  <script type="application/ld+json">${jsonLdHome}</script>
 </head>
 <body>
   <div class="starfield" aria-hidden="true">
