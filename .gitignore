@@ -4,3 +4,7 @@ node_modules/
 .vercel/
 .vercel
 dist/
+.gstack/
+CLAUDE.md
+temp/
+test/
