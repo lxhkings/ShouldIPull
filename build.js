@@ -11,7 +11,7 @@ const games = read("./data/games.json");
 rmSync(new URL("./dist/", import.meta.url), { recursive: true, force: true });
 mkdirSync(new URL("./dist/", import.meta.url), { recursive: true });
 
-for (const asset of ["style.css", "robots.txt"]) {
+for (const asset of ["style.css", "robots.txt", "og-image.png", "favicon.ico", "apple-touch-icon.png"]) {
   if (existsSync(new URL(`./${asset}`, import.meta.url))) {
     cpSync(new URL(`./${asset}`, import.meta.url), new URL(`./dist/${asset}`, import.meta.url));
   }
